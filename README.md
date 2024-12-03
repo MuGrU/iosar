@@ -43,7 +43,7 @@ The script evaluates several performance metrics for each system resource, with 
 - **rxerrs**: Receive errors. *Alert if greater than 0*.
 - **txerrs**: Transmit errors: Same as *rxerrs*.
 
-### Default Thresholds Justification
+## Default Thresholds Justification
 The DEFAULT_THRESHOLDS in this tool were carefully chosen based on general industry best practices and commonly observed system performance patterns. These values aim to strike a balance between catching potential performance issues and avoiding excessive false positives. Here’s the reasoning behind each value:
 
 Balancing Precision and Generality
