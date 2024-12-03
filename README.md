@@ -42,3 +42,37 @@ The script evaluates several performance metrics for each system resource, with 
 - **txdrop**: Dropped transmitted packets. *Alert if greater than 0*.
 - **rxerrs**: Receive errors. *Alert if greater than 0*.
 - **txerrs**: Transmit errors: Same as *rxerrs*.
+
+- ## Usage:
+- python3 iosar.py -f FILE -m {disk,cpu,memory,network} [--verbose]
+
+```console
+foo@bar:~$ python3 iosar.py -f SAfile -m disk --verbose
+[...]
+Metrics analyzed: {'tps': 15.11, 'rkB/s': 116.01, 'wkB/s': 778.38, 'areq-sz': 59.17, 'aqu-sz': 0.02, 'await': 1.49, '%util': 2.71}
+Metrics analyzed: {'tps': 1828.27, 'rkB/s': 96399.45, 'wkB/s': 10975.81, 'areq-sz': 58.73, 'aqu-sz': 2.84, 'await': 1.55, '%util': 98.55}
+Metrics analyzed: {'tps': 0.99, 'rkB/s': 0.03, 'wkB/s': 6.96, 'areq-sz': 7.09, 'aqu-sz': 0.0, 'await': 2.78, '%util': 0.13}
+Metrics analyzed: {'tps': 0.78, 'rkB/s': 0.0, 'wkB/s': 6.24, 'areq-sz': 7.97, 'aqu-sz': 0.0, 'await': 1.12, '%util': 0.13}
+Metrics analyzed: {'tps': 1.7, 'rkB/s': 0.07, 'wkB/s': 1591.48, 'areq-sz': 934.82, 'aqu-sz': 0.02, 'await': 12.96, '%util': 0.38}
+Metrics analyzed: {'tps': 16.23, 'rkB/s': 16.07, 'wkB/s': 1938.5, 'areq-sz': 120.41, 'aqu-sz': 0.03, 'await': 1.7, '%util': 3.55}
+Metrics analyzed: {'tps': 2749.03, 'rkB/s': 85361.37, 'wkB/s': 6803.07, 'areq-sz': 33.53, 'aqu-sz': 4.94, 'await': 1.8, '%util': 98.68}
+
+Performance Issues Report:
+
+
+Analyzing issue in line:
+12:00:01 AM       DEV       tps     rkB/s     wkB/s   areq-sz    aqu-sz     await     svctm     %util
+09:50:01 PM   dev8-32    544.34  59024.86    203.53    108.81      0.72      1.31      0.99     53.94
+
+Detailed Analysis: Low areq-sz detected along with high %util and TPS. This might indicate inefficiency in handling small block sizes. Consider workload optimization.
+
+Analyzing issue in line:
+12:00:01 AM       DEV       tps     rkB/s     wkB/s   areq-sz    aqu-sz     await     svctm     %util
+10:10:01 PM   dev8-32   1207.14 163818.12    474.53    136.10      2.86      2.37      0.73     88.21
+
+Detailed Analysis: High %util with high TPS suggests efficient disk handling. Check for burst workloads.
+High aqu-sz indicates queued I/O operations. Check if workloads can be optimized or parallelized.
+Low areq-sz detected along with high %util and TPS. This might indicate inefficiency in handling small block sizes. Consider workload optimization.
+
+End of report.
+```
