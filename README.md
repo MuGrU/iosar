@@ -43,6 +43,58 @@ The script evaluates several performance metrics for each system resource, with 
 - **rxerrs**: Receive errors. *Alert if greater than 0*.
 - **txerrs**: Transmit errors: Same as *rxerrs*.
 
+### Default Thresholds Justification
+- The DEFAULT_THRESHOLDS in this tool were carefully chosen based on general industry best practices and commonly observed system performance patterns. These values aim to strike a balance between catching potential performance issues and avoiding excessive false positives. Here’s the reasoning behind each value:
+
+####Disk
+tps (1000.0):
+Disk transactions per second represent the I/O intensity of workloads. Systems with traditional disks or smaller SSDs often experience bottlenecks beyond 1000 TPS. While enterprise-grade SSDs or NVMe devices might sustain higher values, the threshold serves as a baseline for detecting unusual activity in most setups.
+
+rkB/s and wkB/s (500,000.0):
+High read/write throughput can indicate heavy workloads, such as database queries or file operations. While high throughput alone is not necessarily bad, sustained rates beyond 500 MB/s are atypical for regular workloads unless dealing with large storage arrays. This threshold serves to flag unexpected spikes.
+
+areq_sz (512.0):
+The average request size below 512 KB might indicate a system struggling with inefficiencies in small block I/O operations. Large request sizes (e.g., >1024 KB) can lead to latency under certain storage configurations, and values near the threshold help maintain balance.
+
+aqu_sz (1.0):
+Average queue size measures how many requests are waiting in the I/O queue. A queue size above 1.0 often correlates with bottlenecks or poorly optimized storage systems. Modern storage can handle brief spikes, but sustained high values suggest system-level adjustments are needed.
+
+await (10.0 ms):
+Latency in I/O operations impacts application performance. A 10 ms threshold is conservative and suitable for most environments, ensuring the tool flags conditions that could cause noticeable degradation.
+
+%util (80.0):
+Disk utilization indicates the percentage of time the disk is busy handling requests. Beyond 80%, the likelihood of saturation and queue buildup increases, causing degraded performance.
+
+#### CPU
+%user (70.0):
+User CPU usage measures how much time the CPU spends executing non-kernel code. Sustained levels above 70% often indicate CPU saturation from user-space processes.
+
+%system (30.0):
+System CPU usage reflects kernel operations like I/O handling. Excessive time spent here (>30%) might indicate inefficiencies, misconfigurations, or excessive context switching.
+
+%idle (20.0):
+A low idle percentage (<20%) shows that the CPU has little breathing room, suggesting high system load. This threshold helps identify when the system is running at near-capacity.
+
+#### Memory
+kbmemfree (50,000.0 KB):
+Free memory below 50 MB often indicates memory pressure, potentially leading to swapping or reduced application performance. Modern systems should have enough free memory to handle bursts of demand.
+
+kbmemused (90.0%):
+Used memory above 90% signals a system nearing full utilization. While Linux aggressively uses available memory for caching, sustained usage above this threshold warrants investigation.
+
+kbactive (80.0%) and kbinact (20.0%):
+Active memory reflects currently used memory for tasks. High active memory with low inactive memory reduces the system’s ability to use caches effectively, impacting overall efficiency.
+
+#### Network
+rxkB/s and txkB/s (100,000.0):
+Network throughput thresholds correspond to typical performance for 1 Gbps links, which provide up to ~125 MB/s effective bandwidth. Spikes beyond this threshold suggest potential issues in data rates exceeding the network’s capacity.
+
+rxdrop and txdrop (0.0):
+Dropped packets are always a concern and often indicate issues with buffer overruns, hardware capacity, or misconfigurations. Any non-zero values should trigger immediate investigation.
+
+rxerrs and txerrs (0.0):
+Packet errors often point to faulty network hardware or incorrect configurations. Non-zero values signal a need for troubleshooting.
+
 - ## Usage:
 - python3 iosar.py -f FILE -m {disk,cpu,memory,network} [--verbose]
 
