@@ -101,6 +101,23 @@ Dropped packets are always a concern and often indicate issues with buffer overr
 - **rxerrs and txerrs (0.0)**:
 Packet errors often point to faulty network hardware or incorrect configurations. Non-zero values signal a need for troubleshooting.
 
+### False Positives and Debugging
+Identifying False Positives
+
+- Correlation with Workloads
+Ensure the flagged metric aligns with known workloads. For instance:
+
+- High tps with high utilization but no reported latency may not be an issue.
+- Low memory free (kbmemfree) may be acceptable if the system is configured with large caches.
+
+- Compare with Baseline
+Historical data can help identify if the current values deviate significantly from the norm.
+
+- Verify SAR Output
+Confirm the SAR data's accuracy. For example, a sudden spike in %util may occur during short bursts.
+
+
+
 ## Usage:
 python3 iosar.py -f FILE -m {disk,cpu,memory,network} [--verbose]
 
