@@ -41,3 +41,4 @@ The script evaluates several performance metrics for each system resource, with 
 - **rxdrop**: Dropped received packets. *Alert if greater than 0*.
 - **txdrop**: Dropped transmitted packets. *Alert if greater than 0*.
 - **rxerrs**: Receive errors. *Alert if greater than 0*.
+- **txerrs**: Transmit errors: Same as *rxerrs*.
