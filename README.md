@@ -46,7 +46,7 @@ The script evaluates several performance metrics for each system resource, with 
 ### Default Thresholds Justification
 - The DEFAULT_THRESHOLDS in this tool were carefully chosen based on general industry best practices and commonly observed system performance patterns. These values aim to strike a balance between catching potential performance issues and avoiding excessive false positives. Here’s the reasoning behind each value:
 
-####Disk
+#### Disk
 tps (1000.0):
 Disk transactions per second represent the I/O intensity of workloads. Systems with traditional disks or smaller SSDs often experience bottlenecks beyond 1000 TPS. While enterprise-grade SSDs or NVMe devices might sustain higher values, the threshold serves as a baseline for detecting unusual activity in most setups.
 
@@ -95,7 +95,7 @@ Dropped packets are always a concern and often indicate issues with buffer overr
 rxerrs and txerrs (0.0):
 Packet errors often point to faulty network hardware or incorrect configurations. Non-zero values signal a need for troubleshooting.
 
-- ## Usage:
+## Usage:
 - python3 iosar.py -f FILE -m {disk,cpu,memory,network} [--verbose]
 
 ```console
